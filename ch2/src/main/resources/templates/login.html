@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1 th:text="${param.msg}"></h1> <!--쿼리 스트링에 있는 거 읽어오는 것-->
+<h1 th:text="${msg}"></h1> <!--세션에서 읽어온다. addFlashAttribute로 저장한 거 가져올 때 씀-->
+<h1 th:text="${#request.getAttribute('msg')}"></h1> <!--requset 객체에서 msg를 가져옴-->
+<form action="/login/login" method="post">
+    id:<br>
+    <input type="text" name="id"><br>
+    pwd:<br>
+    <input type="password" name="pwd"><br>
+    <input type="submit" value="로그인">
+</form>
+</body>
+</html>
