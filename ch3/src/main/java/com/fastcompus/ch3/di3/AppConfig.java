@@ -1,10 +1,7 @@
 package com.fastcompus.ch3.di3;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 // 객체를 생성해서 사용하기 위함이 아닌 설정을 위한 클래스
 @Configuration // 일반 클래스가 아닌 설정 클래스라는 뜻
