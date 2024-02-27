@@ -13,6 +13,9 @@ public class Board {
     private String writer;
     private String content;
     private Long viewCnt;
+    @ManyToOne
+    @JoinColumn(name="user_id", nullable = false)
+    private User user;
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date inDate;
     @Temporal(value = TemporalType.TIMESTAMP)
@@ -58,6 +61,14 @@ public class Board {
         this.viewCnt = viewCnt;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Date getInDate() {
         return inDate;
     }
@@ -70,8 +81,8 @@ public class Board {
         return upDate;
     }
 
-    public void setUpDate(Date update) {
-        this.upDate = update;
+    public void setUpDate(Date upDate) {
+        this.upDate = upDate;
     }
 
     @Override
@@ -82,8 +93,9 @@ public class Board {
                 ", writer='" + writer + '\'' +
                 ", content='" + content + '\'' +
                 ", viewCnt=" + viewCnt +
+//                ", user=" + user +
                 ", inDate=" + inDate +
-                ", update=" + upDate +
+                ", upDate=" + upDate +
                 '}';
     }
 }
