@@ -2,6 +2,8 @@ package hellojpa;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 public class JpaMain {
     public static void main(String[] args) {
         // 팩토리를 만드는 순간 DB 연결된 것..
@@ -13,8 +15,9 @@ public class JpaMain {
 
         try {
             Member member = new Member();
-            member.setId(1L);
-            member.setName("HelloA");
+            member.setId(3L);
+            member.setUsername("C");
+            member.setRoleType(RoleType.ADMIN);
 
             em.persist(member);
 
@@ -27,6 +30,5 @@ public class JpaMain {
             em.close(); // 얘 닫아주는 게 매우 중요. DB 커넥션을 계속 물고 있기 때문에..
             emf.close();
         }
-
     }
 }
