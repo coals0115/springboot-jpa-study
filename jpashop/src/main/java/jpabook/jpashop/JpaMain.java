@@ -5,7 +5,8 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 import jpabook.jpashop.domain.Member;
-import jpabook.jpashop.domain.Team;
+import jpabook.jpashop.domain.Order;
+import jpabook.jpashop.domain.OrderItem;
 
 public class JpaMain {
     public static void main(String[] args) {
@@ -17,18 +18,11 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Team team = new Team();
-            team.setName("TeamA");
-            em.persist(team); // persist를 하면 id에 값이 들어간다.
-            // persist를 하면 무조건 PK가 세팅이 되고 영속 상태가 된다.
+            Order order = new Order();
+            order.addOrderItem(new OrderItem());
 
-            Member member = new Member();
-            member.setName("member1");
-            member.setTeamId(team.getId()); // 객체지향스럽지 않다..
-            em.persist(member);
 
             tx.commit();
-
         } catch (Exception e) {
             tx.rollback();
 
