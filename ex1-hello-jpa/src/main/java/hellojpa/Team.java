@@ -1,9 +1,6 @@
 package hellojpa;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +10,8 @@ public class Team {
     @Id @GeneratedValue
     private Long id;
     private String name;
-    @OneToMany(mappedBy = "team") // 나는 반대편에서 team으로 매핑이 되어있다..
-    private List<Member> members = new ArrayList<>(); // add 시 NPE가 안 뜨기 때문에 관례료 많이 쓴다.
+    @OneToMany(mappedBy = "team")
+    private List<Member> members = new ArrayList<>();
 
     public Long getId() {
         return id;

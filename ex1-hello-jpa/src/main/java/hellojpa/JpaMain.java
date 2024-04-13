@@ -14,27 +14,27 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Member member = new Member();
-            member.setName("member1");
-            member.setTeam(team); // JPA가 team에서 PK를 꺼내 FK에 insert 할 때 값을 넣어준다.
-            em.persist(member);
-
             Team team = new Team();
             team.setName("TeamA");
-            em.persist(team); // persist를 하면 id에 값이 들어간다.
-            // persist를 하면 무조건 PK가 세팅이 되고 영속 상태가 된다.
+            em.persist(team);
+
+            Member member = new Member();
+            member.setName("member1");
+            member.changeTeam(team);
+            em.persist(member);
+
+            // 이렇게 안 넣어두면 두 군데에서 문제가 생긴다.
+            team.getMembers().add(member);
 
             em.flush(); // flush로 영속성 컨텍스트에 있는 걸 DB에 쿼리를 날린다. / 싱크를 맞춤
             em.clear(); // 영속성 컨텍스트 초기화
 
-            Member findMember = em.find(Member.class, member.getId()); // 기본값일 시에(EAGER?) TEAM을 같이 가져온다.(조인해서)
+            Team findTeam = em.find(Team.class, team.getId());
+            List<Member> members = findTeam.getMembers();
 
-            List<Member> members = findMember.getTeam().getMembers();
-            for (Member member1 : members) {
-                System.out.println("member1 = " + member1);
+            for (Member m : members) {
+                System.out.println("m = " + m);
             }
-
-
 
             tx.commit();
 
