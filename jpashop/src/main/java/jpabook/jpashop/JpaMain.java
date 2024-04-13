@@ -1,6 +1,11 @@
-package hellojpa;
+package jpabook.jpashop;
 
-import jakarta.persistence.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
+import jpabook.jpashop.domain.Member;
+import jpabook.jpashop.domain.Team;
 
 public class JpaMain {
     public static void main(String[] args) {
@@ -19,23 +24,8 @@ public class JpaMain {
 
             Member member = new Member();
             member.setName("member1");
-            member.setTeam(team); // JPA가 team에서 PK를 꺼내 FK에 insert 할 때 값을 넣어준다.
+            member.setTeamId(team.getId()); // 객체지향스럽지 않다..
             em.persist(member);
-
-            em.flush(); // flush로 영속성 컨텍스트에 있는 걸 DB에 쿼리를 날린다. / 싱크를 맞춤
-            em.clear(); // 영속성 컨텍스트 초기화
-
-            Member findMember = em.find(Member.class, member.getId()); // 기본값일 시에(EAGER?) TEAM을 같이 가져온다.(조인해서)
-            Team findTeam = findMember.getTeam();
-            System.out.println("findTeam = " + findTeam);
-
-            // 새로운 팀B
-            Team teamB = new Team();
-            teamB.setName("TeamB");
-            em.persist(teamB);
-
-            // 회원1에 새로운 팀B 설정
-            member.setTeam(teamB);
 
             tx.commit();
 

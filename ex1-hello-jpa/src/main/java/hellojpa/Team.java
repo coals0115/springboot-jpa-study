@@ -1,16 +1,14 @@
 package hellojpa;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 
 @Entity
-public class Member {
+public class Team {
     @Id @GeneratedValue
     private Long id;
-    @Column(name = "USERNAME")
     private String name;
-    @ManyToOne
-    @JoinColumn(name = "TEAM_ID")
-    private Team team;
 
     public Long getId() {
         return id;
@@ -28,20 +26,11 @@ public class Member {
         this.name = name;
     }
 
-    public Team getTeam() {
-        return team;
-    }
-
-    public void setTeam(Team team) {
-        this.team = team;
-    }
-
     @Override
     public String toString() {
-        return "Member{" +
+        return "Team{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", team=" + team +
                 '}';
     }
 }
