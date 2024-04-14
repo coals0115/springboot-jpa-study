@@ -16,6 +16,11 @@ public class Order {
     @ManyToOne()
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
+
+    @OneToOne
+    @JoinColumn(name = "DELIVERY_ID")
+    private Delivery delivery;
+
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems = new ArrayList<>();
     private LocalDateTime orderData; // 자동으로 매핑을 해주기 때문에 손 안 대도 괜찮다.

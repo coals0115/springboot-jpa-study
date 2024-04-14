@@ -20,7 +20,7 @@ public class JpaMain {
 
             Member member = new Member();
             member.setName("member1");
-            member.changeTeam(team);
+//            member.changeTeam(team);
             em.persist(member);
 
             // 이렇게 안 넣어두면 두 군데에서 문제가 생긴다.
