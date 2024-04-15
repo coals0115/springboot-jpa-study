@@ -7,6 +7,7 @@ import jakarta.persistence.Persistence;
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.domain.Order;
 import jpabook.jpashop.domain.OrderItem;
+import jpabook.jpashop.domain.item.Book;
 
 public class JpaMain {
     public static void main(String[] args) {
@@ -18,9 +19,11 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Order order = new Order();
-            order.addOrderItem(new OrderItem());
+            Book book = new Book();
+            book.setName("JPA");
+            book.setAuthor("김영햔");
 
+            em.persist(book);
 
             tx.commit();
         } catch (Exception e) {

@@ -1,7 +1,9 @@
 package hellojpa;
 
+import hellojpa.item.Movie;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class JpaMain {
@@ -14,30 +16,25 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Team team = new Team();
-            team.setName("TeamA");
-            em.persist(team);
+//            Movie movie = new Movie();
+//            movie.setDirector("aaaa");
+//            movie.setActor("bbbb");
+//            movie.setName("바람과함께사라지다");
+//            movie.setPrice(10000);
+//
+//            em.persist(movie);
+//
+//            em.flush();
+//            em.clear();
+//
+//            Movie findMovie = em.find(Movie.class, movie.getId());
+//            System.out.println("findMovie.getName() = " + findMovie.getName());
 
             Member member = new Member();
-            member.setName("member1");
-//            member.changeTeam(team);
-            em.persist(member);
-
-            // 이렇게 안 넣어두면 두 군데에서 문제가 생긴다.
-            team.getMembers().add(member);
-
-            em.flush(); // flush로 영속성 컨텍스트에 있는 걸 DB에 쿼리를 날린다. / 싱크를 맞춤
-            em.clear(); // 영속성 컨텍스트 초기화
-
-            Team findTeam = em.find(Team.class, team.getId());
-            List<Member> members = findTeam.getMembers();
-
-            for (Member m : members) {
-                System.out.println("m = " + m);
-            }
+            member.setCreatedBy("kim");
+//            member.setCreatedDate(LocalDateTime.now());
 
             tx.commit();
-
         } catch (Exception e) {
             tx.rollback();
 

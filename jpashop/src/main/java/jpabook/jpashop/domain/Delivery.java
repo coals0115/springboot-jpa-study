@@ -8,7 +8,7 @@ import jakarta.persistence.OneToOne;
 import java.nio.channels.Pipe;
 
 @Entity
-public class Delivery {
+public class Delivery extends BaseEntity {
     @Id @GeneratedValue
     private Long id;
     @OneToOne(mappedBy = "delivery")
