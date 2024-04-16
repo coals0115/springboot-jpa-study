@@ -16,23 +16,17 @@ public class JpaMain {
         tx.begin();
 
         try {
-//            Movie movie = new Movie();
-//            movie.setDirector("aaaa");
-//            movie.setActor("bbbb");
-//            movie.setName("바람과함께사라지다");
-//            movie.setPrice(10000);
-//
-//            em.persist(movie);
-//
-//            em.flush();
-//            em.clear();
-//
-//            Movie findMovie = em.find(Movie.class, movie.getId());
-//            System.out.println("findMovie.getName() = " + findMovie.getName());
-
             Member member = new Member();
-            member.setCreatedBy("kim");
-//            member.setCreatedDate(LocalDateTime.now());
+            member.setName("hello");
+
+            em.persist(member);
+
+            em.flush();
+            em.clear();
+
+            Member findMember = em.getReference(Member.class, member.getId());
+            System.out.println("findMember.getName() = " + findMember.getName());
+            System.out.println("emf.getPersistenceUnitUtil().isLoaded(findMember) = " + emf.getPersistenceUnitUtil().isLoaded(findMember));
 
             tx.commit();
         } catch (Exception e) {
