@@ -16,17 +16,21 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Member member = new Member();
-            member.setName("hello");
+            Team team = new Team();
+            team.setName("teamA");
 
-            em.persist(member);
+            em.persist(team);
+
+            Member member1 = new Member();
+            member1.setName("member1");
+            member1.setTeam(team);
+
+            em.persist(member1);
 
             em.flush();
             em.clear();
 
-            Member findMember = em.getReference(Member.class, member.getId());
-            System.out.println("findMember.getName() = " + findMember.getName());
-            System.out.println("emf.getPersistenceUnitUtil().isLoaded(findMember) = " + emf.getPersistenceUnitUtil().isLoaded(findMember));
+            List<Member> members = em.createQuery("select m from Member m", Member.class).getResultList();
 
             tx.commit();
         } catch (Exception e) {
