@@ -7,7 +7,7 @@ public class Member {
 
     @Id @GeneratedValue
     private Long id;
-    private String usename;
+    private String username;
     private int age;
     @ManyToOne
     @JoinColumn(name = "TEAM_ID") // 그냥 member가 가지고 있는 team의 fk 컬럼명 적어준다고 생각하면 될듯?
@@ -21,12 +21,12 @@ public class Member {
         this.id = id;
     }
 
-    public String getUsename() {
-        return usename;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUsename(String usename) {
-        this.usename = usename;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public int getAge() {
@@ -35,5 +35,13 @@ public class Member {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 }
