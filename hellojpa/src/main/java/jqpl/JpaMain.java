@@ -14,9 +14,12 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Member member = new Member();
-            member.setUsername("member1");
-            em.persist(member);
+            for (int i = 0; i < 100; i++) {
+                Member member = new Member();
+                member.setUsername("member" + i);
+                member.setAge(i);
+                em.persist(member);
+            }
 
             TypedQuery<Member> query1 = em.createQuery("select m from Member m", Member.class);
             Query query2 = em.createQuery("select m from Member m");
@@ -25,20 +28,14 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            List<Member> result = query1.getResultList();
-            Member member1 = result.get(0);
-            member1.setAge(20);
+            List<Member> resultList = em.createQuery("select m from Member m order by m.age desc", Member.class)
+                    .setFirstResult(1)
+                    .setMaxResults(10)
+                    .getResultList();
 
-            // JPQL은 SQL과 비슷하게 써야 한다. 아래와 같은 방식은 권장하지 않음 이렇게 짜면 TEAM과 조인 쿼리라 나갈 거라는 예측이 되지 않는다.
-            TypedQuery<Team> query4 = em.createQuery("select m.team from Member m", Team.class);
-            List<Team> query5 = em.createQuery("select t from Member m join m.team t", Team.class).getResultList();
-            // 얘는 Order 안에 있는 값이기 때문에 문제X
-            em.createQuery("select o.address from Order o", Address.class).getResultList();
-
-            List<MemberDTO> resultList = em.createQuery("select new jqpl.MemberDTO(m.username, m.age) from Member m", MemberDTO.class).getResultList();
-            MemberDTO memberDTO = resultList.get(0);
-            System.out.println("memberDTO.getUsername() = " + memberDTO.getUsername());
-            System.out.println("memberDTO.getAge() = " + memberDTO.getAge());
+            for (Member member1 : resultList) {
+                System.out.println("member1 = " + member1);
+            }
 
 
             tx.commit();
