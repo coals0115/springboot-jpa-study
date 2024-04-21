@@ -9,6 +9,8 @@ import jpabook.jpashop.domain.Order;
 import jpabook.jpashop.domain.OrderItem;
 import jpabook.jpashop.domain.item.Book;
 
+import java.util.List;
+
 public class JpaMain {
     public static void main(String[] args) {
         // 팩토리를 만드는 순간 DB 연결된 것..
@@ -19,17 +21,13 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Member member = new Member();
-            member.setName("hello");
+            // 여기서 M은 멤버 엔티티를 가리킴
+            String qlString = "select m from Member m where m.name like 'kim%'";
+            List<Member> result = em.createQuery(qlString, Member.class).getResultList();
 
-            em.persist(member);
-
-            em.flush();
-            em.clear();
-
-            Member findMember = em.find(Member.class, member.getId());
-            System.out.println("findMember.getId() = " + findMember.getId());
-            System.out.println("findMember.getName() = " + findMember.getName());
+            for (Member member : result) {
+                System.out.println("member = " + member);
+            }
 
             tx.commit();
         } catch (Exception e) {
