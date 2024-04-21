@@ -9,9 +9,14 @@ public class Member {
     private Long id;
     private String username;
     private int age;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TEAM_ID") // 그냥 member가 가지고 있는 team의 fk 컬럼명 적어준다고 생각하면 될듯?
     private Team team;
+
+    public void changeTeam(Team team) {
+        this.team = team; // 1. 멤버에 팀을 세팅한다.
+        team.getMembers().add(this); // 2. 팀에 멤버를 세팅한다.
+    }
 
     public Long getId() {
         return id;

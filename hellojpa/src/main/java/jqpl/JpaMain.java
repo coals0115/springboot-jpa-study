@@ -14,29 +14,25 @@ public class JpaMain {
         tx.begin();
 
         try {
-            for (int i = 0; i < 100; i++) {
-                Member member = new Member();
-                member.setUsername("member" + i);
-                member.setAge(i);
-                em.persist(member);
-            }
+            Team team = new Team();
+            team.setName("teamA");
+            em.persist(team);
 
-            TypedQuery<Member> query1 = em.createQuery("select m from Member m", Member.class);
-            Query query2 = em.createQuery("select m from Member m");
-            TypedQuery<Integer> query3 = em.createQuery("select m.age from Member m", Integer.class);
+            Member member = new Member();
+            member.setUsername("member1");
+            member.setAge(10);
+
+            member.changeTeam(team);
+
+            em.persist(member);
 
             em.flush();
             em.clear();
 
-            List<Member> resultList = em.createQuery("select m from Member m order by m.age desc", Member.class)
-                    .setFirstResult(1)
-                    .setMaxResults(10)
-                    .getResultList();
+            // Member와 Team inner join.. | join column 애너테이션이 있으니까 알아서 해주는 건가..?
+            List<Member> resultList = em.createQuery("select m from Member m inner join m.team t", Member.class).getResultList();
 
-            for (Member member1 : resultList) {
-                System.out.println("member1 = " + member1);
-            }
-
+//            select * from member m ,team t where m.team_id = t.id;
 
             tx.commit();
         } catch (Exception e) {
