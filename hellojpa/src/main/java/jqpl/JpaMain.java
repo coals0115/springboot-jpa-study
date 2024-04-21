@@ -21,6 +21,7 @@ public class JpaMain {
             Member member = new Member();
             member.setUsername("member1");
             member.setAge(10);
+            member.setMemberType(MemberType.ADMIN);
 
             member.changeTeam(team);
 
@@ -29,10 +30,19 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            // Member와 Team inner join.. | join column 애너테이션이 있으니까 알아서 해주는 건가..?
-            List<Member> resultList = em.createQuery("select m from Member m inner join m.team t", Member.class).getResultList();
+//            String query = "select m.username, 'HELLO', true from Member m where m.memberType = jqpl.MemberType.USER";
+            String query = "select m.username, 'HELLO', true from Member m where m.memberType = :userType";
 
-//            select * from member m ,team t where m.team_id = t.id;
+            List<Object[]> resultList = em.createQuery(query)
+                    .setParameter("userType", MemberType.ADMIN)
+                    .getResultList();
+
+            for (Object[] objects : resultList) {
+                System.out.println("objects[0] = " + objects[0]);
+                System.out.println("objects[1] = " + objects[1]);
+                System.out.println("objects[2] = " + objects[2]);
+            }
+
 
             tx.commit();
         } catch (Exception e) {

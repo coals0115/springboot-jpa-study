@@ -13,6 +13,9 @@ public class Member {
     @JoinColumn(name = "TEAM_ID") // 그냥 member가 가지고 있는 team의 fk 컬럼명 적어준다고 생각하면 될듯?
     private Team team;
 
+    @Enumerated(EnumType.STRING)
+    private MemberType memberType;
+
     public void changeTeam(Team team) {
         this.team = team; // 1. 멤버에 팀을 세팅한다.
         team.getMembers().add(this); // 2. 팀에 멤버를 세팅한다.
@@ -50,12 +53,21 @@ public class Member {
         this.team = team;
     }
 
+    public MemberType getMemberType() {
+        return memberType;
+    }
+
+    public void setMemberType(MemberType memberType) {
+        this.memberType = memberType;
+    }
+
     @Override
     public String toString() {
         return "Member{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", age=" + age +
+                ", memberType=" + memberType +
                 '}';
     }
 }
