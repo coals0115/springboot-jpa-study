@@ -2,6 +2,7 @@ package jqpl;
 
 import jakarta.persistence.*;
 
+import java.util.Collection;
 import java.util.List;
 
 public class JpaMain {
@@ -30,19 +31,23 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-//            String query = "select m.username, 'HELLO', true from Member m where m.memberType = jqpl.MemberType.USER";
-            String query = "select m.username, 'HELLO', true from Member m where m.memberType = :userType";
+            // 1. 상태 필드
+//            String query = "select m.username from Member m";
 
-            List<Object[]> resultList = em.createQuery(query)
-                    .setParameter("userType", MemberType.ADMIN)
+            // 2. 단일 값 연관 경로
+//            String query2 = "select m.team.name from Member m";
+//            List<String> resultList = em.createQuery(query, String.class)
+//                    .getResultList();
+
+            // 3. 컬렉션 값 연관 경로
+//            String query = "select t.members. from Team t";
+            String query = "select m.username from Team t join t.members m";
+            Collection resultList = em.createQuery(query, Collection.class)
                     .getResultList();
 
-            for (Object[] objects : resultList) {
-                System.out.println("objects[0] = " + objects[0]);
-                System.out.println("objects[1] = " + objects[1]);
-                System.out.println("objects[2] = " + objects[2]);
+            for (Object o : resultList) {
+                System.out.println("o = " + o);
             }
-
 
             tx.commit();
         } catch (Exception e) {
