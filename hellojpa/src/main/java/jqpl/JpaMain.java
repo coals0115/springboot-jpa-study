@@ -15,39 +15,71 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Team team = new Team();
-            team.setName("teamA");
-            em.persist(team);
+            Team teamA = new Team();
+            teamA.setName("팀A");
+            em.persist(teamA);
 
-            Member member = new Member();
-            member.setUsername("member1");
-            member.setAge(10);
-            member.setMemberType(MemberType.ADMIN);
+            Team teamB = new Team();
+            teamB.setName("팀B");
+            em.persist(teamB);
 
-            member.changeTeam(team);
+            Member member1 = new Member();
+            member1.setUsername("회원1");
+            member1.setTeam(teamA);
+            em.persist(member1);
 
-            em.persist(member);
+            Member member2 = new Member();
+            member2.setUsername("회원2");
+            member2.setTeam(teamA);
+            em.persist(member2);
+
+            Member member3 = new Member();
+            member3.setUsername("회원3");
+            member3.setTeam(teamB);
+            em.persist(member3);
 
             em.flush();
             em.clear();
 
-            // 1. 상태 필드
-//            String query = "select m.username from Member m";
+            String query = "select t from Team t";
 
-            // 2. 단일 값 연관 경로
-//            String query2 = "select m.team.name from Member m";
-//            List<String> resultList = em.createQuery(query, String.class)
-//                    .getResultList();
-
-            // 3. 컬렉션 값 연관 경로
-//            String query = "select t.members. from Team t";
-            String query = "select m.username from Team t join t.members m";
-            Collection resultList = em.createQuery(query, Collection.class)
+            List<Team> result = em.createQuery(query, Team.class)
+                    .setFirstResult(0)
+                    .setMaxResults(2)
                     .getResultList();
 
-            for (Object o : resultList) {
-                System.out.println("o = " + o);
+            System.out.println("result = " + result.size());
+
+            for (Team team : result) {
+                System.out.println("team = " + team.getName() + "| members = " + team.getMembers());
+                for (Member member : team.getMembers()) {
+                    System.out.println("-> member = " + member);
+                }
             }
+
+            // 1. 엔티티 페치 조인
+//            String query = "select m FROM Member m join fetch m.team";
+//            List<Member> resultList = em.createQuery(query, Member.class)
+//                    .getResultList();
+//
+//            for (Member member : resultList) {
+//                System.out.println("member = " + member.getUsername() + ", " + member.getTeam().getName());
+//            }
+
+            // 2. 컬렉션 페치 조인
+//            List<Team> resultList = em.createQuery("select t from Team t join fetch t.members", Team.class)
+//                    .getResultList();
+//
+////            System.out.println("resultList.size() = " + resultList.size());
+//            for (Team team : resultList) {
+//                System.out.println("team = " + team.getName() + "|members = " + team.getMembers().size());
+//                for (Member member : team.getMembers()) {
+//                    System.out.println("-> member = " + member);
+//                }
+//            }
+
+
+
 
             tx.commit();
         } catch (Exception e) {
