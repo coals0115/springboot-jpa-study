@@ -33,12 +33,13 @@ public abstract class Item {
     // 아래와 같은 비즈니스 메서드를 통해 변경을 해야 함(내부에서) => 객체지향적
     public void addStock(int quantity) {
         this.stockQuantity += quantity;
-    }
+}
 
     public void removeStock(int quantity) {
         int restStock = this.stockQuantity - quantity;
         if (restStock < 0) {
-            throw new NotEnoughStockException("need more stock");
+        throw new NotEnoughStockException("need more stock");
         }
+        this.stockQuantity = restStock;;
     }
 }

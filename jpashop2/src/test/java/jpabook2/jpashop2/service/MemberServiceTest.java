@@ -1,6 +1,5 @@
 package jpabook2.jpashop2.service;
 
-import com.fasterxml.jackson.databind.deser.std.StdKeyDeserializer;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jpabook2.jpashop2.domain.Member;
@@ -33,7 +32,7 @@ public class MemberServiceTest {
 
         // then
         em.flush();
-        assertEquals(member, memberRepository.findONe(saveId)); // 내가 저장한 엔티티랑 그 키값을 통해 찾은 데이터랑 같은지
+        assertEquals(member, memberRepository.findOne(saveId)); // 내가 저장한 엔티티랑 그 키값을 통해 찾은 데이터랑 같은지
     }
 
     @Test(expected = IllegalStateException.class)
