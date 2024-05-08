@@ -1,23 +1,26 @@
 package jpabook2.jpashop2.service;
 
-import jakarta.transaction.Transactional;
 import java.util.List;
 import jpabook2.jpashop2.domain.Member;
 import jpabook2.jpashop2.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class MemberService {
+
     private final MemberRepository memberRepository;
 
     /**
-     * 회원가입
+     * 회원 가입
      */
+    @Transactional
     public Long join(Member member) {
-        validateDuplicateMember(member); // 중복 회원 검증
+
+        validateDuplicateMember(member); //중복 회원 검증
         memberRepository.save(member);
         return member.getId();
     }
@@ -29,9 +32,22 @@ public class MemberService {
         }
     }
 
-    // 회원 전체 조회
+    //회원 전체 조회
     public List<Member> findMembers() {
         return memberRepository.findAll();
+    }
+
+    public Member findOne(Long memberId) {
+        return memberRepository.findOne(memberId);
+    }
+
+    /**
+     * 회원 수정
+     */
+    @Transactional
+    public void update(Long id, String name) {
+        Member member = memberRepository.findOne(id);
+        member.setName(name);
     }
 
 }
