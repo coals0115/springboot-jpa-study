@@ -28,6 +28,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web' // 얘가 필요한 라이브러리들을 다 가져온다.
     implementation 'org.springframework.boot:spring-boot-devtools'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5'
 
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0' // 스부가 지원하지 않는 라이브러리들은 직접 라이브러리 버전 정보를 적어줘야 한다.
 
