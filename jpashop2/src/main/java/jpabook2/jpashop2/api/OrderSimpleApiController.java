@@ -25,12 +25,16 @@ public class OrderSimpleApiController {
 
     @GetMapping("/api/v2/simple-orders")
     public List<SimpleOrderDto> ordersV2() {
-        // ORDER 2개
-        // N + 1
-        // 1: 첫 번째 쿼리가 나감. 여기서는 orders. 여기서 N개를 가져왔다. N(2)
-        // 그러면 첫 번째 쿼리의 결과로 N번만큼 query가 추가 실행되는 게 N + 1 문제..
-        // 1 + 회원 N + 배송 + N
         List<Order> orders = orderRepository.findAllByString(new OrderSearch()); // orders를 그대로 주면 절대 안됨
+        return orders.stream()
+                .map(o -> new SimpleOrderDto(o))
+                .toList();
+    }
+
+    @GetMapping("/api/v3/simple-orders")
+    public List<SimpleOrderDto> ordersV3(){
+        List<Order> orders = orderRepository.findAllWithMemberDelivery();
+
         return orders.stream()
                 .map(o -> new SimpleOrderDto(o))
                 .toList();
