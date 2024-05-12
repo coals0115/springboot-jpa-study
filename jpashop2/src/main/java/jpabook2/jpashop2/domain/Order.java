@@ -3,6 +3,7 @@ package jpabook2.jpashop2.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class Order {
     @JoinColumn(name="member_id")
     private Member member;
 
+    @BatchSize(size = 1000)
     @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 

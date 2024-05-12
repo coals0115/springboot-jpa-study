@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import jpabook2.jpashop2.exception.NotEnoughStockException;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@BatchSize(size = 100)
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype")
@@ -40,6 +42,6 @@ public abstract class Item {
         if (restStock < 0) {
         throw new NotEnoughStockException("need more stock");
         }
-        this.stockQuantity = restStock;;
+        this.stockQuantity = restStock;
     }
 }

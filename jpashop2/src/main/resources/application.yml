@@ -16,6 +16,7 @@ spring:
       hibernate:
 #        show_sql: true # 운영 환경에서는 logger 통해서 찍어야 함
         format_sql: true
+        default_batch_fetch_size: 100
 logging:
   level:
     org.hibernate:
