@@ -3,7 +3,6 @@ package study.datajpa.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.entity.Member;
 
@@ -49,5 +48,22 @@ public class MemberJpaRepositoryTest {
         memberJpaRepository.delete(member1); memberJpaRepository.delete(member2);
         long deletedCount = memberJpaRepository.count();
         assertThat(deletedCount).isEqualTo(0);
+    }
+    
+    @Test
+    public void findByUsernameAndAgeGreaterThen() throws Exception {
+        // given
+        Member m1 = new Member("AAA", 28);
+        Member m2 = new Member("AAA", 23);
+        memberJpaRepository.save(m1);
+        memberJpaRepository.save(m2);
+
+        // when
+        List<Member> result = memberJpaRepository.findByUsernameAndAgeGreaterThan("AAA", 25);
+
+        // then
+        assertThat(result.get(0).getUsername()).isEqualTo("AAA");
+        assertThat(result.get(0).getAge()).isEqualTo(28);
+        assertThat(result.size()).isEqualTo(1);
     }
 }
