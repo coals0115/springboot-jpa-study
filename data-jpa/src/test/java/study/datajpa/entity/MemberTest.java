@@ -2,22 +2,23 @@ package study.datajpa.entity;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 @Transactional
-public class MemberTest {
+class MemberTest {
 
     @PersistenceContext
     EntityManager em;
 
     @Test
-    public void testEntity() throws Exception {
-        //given
+    public void testEntity() {
         Team teamA = new Team("teamA");
         Team teamB = new Team("teamB");
         em.persist(teamA);
@@ -41,6 +42,7 @@ public class MemberTest {
             System.out.println("member = " + member);
             System.out.println("member.getTeam() = " + member.getTeam());
         }
+
     }
 
 }
