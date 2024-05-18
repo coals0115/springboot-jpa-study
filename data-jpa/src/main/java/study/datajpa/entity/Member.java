@@ -9,6 +9,9 @@ import lombok.*;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 프록시 기술을 쓸 때 생성자가 priavate으로 막혀있으면 생성 못 하기 때문에 protected로 해줘야 함)
 @ToString(of = {"id", "username", "age"})
+@NamedQuery(name = "Member.findByUsername",
+        query = "select m from Member m where m.username = :username"
+)
 public class Member {
     @Id
     @GeneratedValue
