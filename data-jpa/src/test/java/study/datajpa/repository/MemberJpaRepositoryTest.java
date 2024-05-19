@@ -3,6 +3,7 @@ package study.datajpa.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.entity.Member;
 
@@ -12,12 +13,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
-public class MemberJpaRepositoryTest {
+@Rollback(value = false)
+class MemberJpaRepositoryTest {
     @Autowired
     MemberJpaRepository memberJpaRepository;
 
     @Test
-    public void testMember() {
+    void testMember() {
         Member member = new Member("memberA");
         Member savedMember = memberJpaRepository.save(member);
         Member findMember = memberJpaRepository.find(savedMember.getId());
@@ -27,7 +29,7 @@ public class MemberJpaRepositoryTest {
     }
 
     @Test
-    public void basicCRUD() {
+    void basicCRUD() {
         Member member1 = new Member("member1");
         Member member2 = new Member("member2");
         memberJpaRepository.save(member1);
@@ -51,7 +53,7 @@ public class MemberJpaRepositoryTest {
     }
     
     @Test
-    public void findByUsernameAndAgeGreaterThen() throws Exception {
+    void findByUsernameAndAgeGreaterThen() throws Exception {
         // given
         Member m1 = new Member("AAA", 28);
         Member m2 = new Member("AAA", 23);
@@ -68,7 +70,7 @@ public class MemberJpaRepositoryTest {
     }
 
     @Test
-    public void paging() throws Exception {
+    void paging() throws Exception {
         // given
         memberJpaRepository.save(new Member("member1", 10));
         memberJpaRepository.save(new Member("member2", 10));
@@ -90,4 +92,18 @@ public class MemberJpaRepositoryTest {
 
         // then
     }
+
+    @Test
+    void bulkUpdate() {
+        memberJpaRepository.save(new Member("member1", 10));
+        memberJpaRepository.save(new Member("member2", 19));
+        memberJpaRepository.save(new Member("member3", 20));
+        memberJpaRepository.save(new Member("member4", 21));
+        memberJpaRepository.save(new Member("member5", 40));
+
+        int resultCount = memberJpaRepository.bulkAgePlus(20);
+        assertThat(resultCount).isEqualTo(3);
+
+    }
+    
 }
