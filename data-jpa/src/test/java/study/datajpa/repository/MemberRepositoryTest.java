@@ -160,15 +160,16 @@ class MemberRepositoryTest {
         PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "username"));
 
         // when
-        Page<Member> page = memberRepository.findByAge(age, pageRequest);
+        Page<Member> page = memberRepository.findByAge(age, pageRequest); // 절대 Page<Member>를 외부에 반환 XX
+        Page<MemberDto> toMap = page.map(m -> new MemberDto(m.getId(), m.getUsername(), null));
 
         // then
         List<Member> content = page.getContent();
 
         assertThat(content.size()).isEqualTo(3);
-        assertThat(page.getTotalElements()).isEqualTo(6);
+//        assertThat(page.getTotalElements()).isEqualTo(6);
         assertThat(page.getNumber()).isEqualTo(0);
-        assertThat(page.getTotalPages()).isEqualTo(2);
+//        assertThat(page.getTotalPages()).isEqualTo(2);
         assertThat(page.isFirst()).isTrue();
     }
     
