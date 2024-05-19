@@ -4,6 +4,9 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.dto.MemberDto;
 import study.datajpa.entity.Member;
@@ -24,7 +27,7 @@ class MemberRepositoryTest {
     TeamRepository teamRepository;
 
     @Test
-    public void testMember() {
+    void testMember() {
         Member member = new Member("memberA");
         Member savedMember = memberRepository.save(member);
         Member findMember = memberRepository.findById(savedMember.getId()).get();
@@ -35,7 +38,7 @@ class MemberRepositoryTest {
     }
 
     @Test
-    public void basicCRUD() {
+    void basicCRUD() {
         Member member1 = new Member("member1");
         Member member2 = new Member("member2");
         memberRepository.save(member1);
@@ -63,7 +66,7 @@ class MemberRepositoryTest {
     }
 
     @Test
-    public void findByHelloTest() throws Exception {
+    void findByHelloTest() throws Exception {
         // given
         List<Member> memberList = memberRepository.findTop3HelloBy();
         System.out.println("memberList = " + memberList);
@@ -74,7 +77,7 @@ class MemberRepositoryTest {
     }
 
     @Test
-    public void testQuery() throws Exception {
+    void testQuery() throws Exception {
         Member m1 = new Member("AAA", 10);
         Member m2 = new Member("BBB", 20);
 
@@ -86,7 +89,7 @@ class MemberRepositoryTest {
     }
 
     @Test
-    public void findUsernameListTest() throws Exception {
+    void findUsernameListTest() throws Exception {
         Member m1 = new Member("AAA", 10);
         Member m2 = new Member("BBB", 20);
 
@@ -100,7 +103,7 @@ class MemberRepositoryTest {
     }
 
     @Test
-    public void findMemberDto() throws Exception {
+    void findMemberDto() throws Exception {
         Team team = new Team("teamA");
         teamRepository.save(team);
 
@@ -115,7 +118,7 @@ class MemberRepositoryTest {
     }
 
     @Test
-    public void findByNames() throws Exception {
+    void findByNames() throws Exception {
         Member m1 = new Member("AAA", 10);
         Member m2 = new Member("BBB", 20);
 
@@ -130,7 +133,7 @@ class MemberRepositoryTest {
     }
 
     @Test
-    public void returnType() throws Exception {
+    void returnType() throws Exception {
         Member m1 = new Member("AAA", 10);
         Member m2 = new Member("AAA", 20);
 
@@ -141,6 +144,32 @@ class MemberRepositoryTest {
 //        Member bbb = memberRepository.findMemberByUsername("AAA");
         Optional<Member> findMember = memberRepository.findOptionalByUsername("AAA");
         System.out.println("findMember = " + findMember);
+    }
+
+    @Test
+    void paging() throws Exception {
+        // given
+        memberRepository.save(new Member("member1", 10));
+        memberRepository.save(new Member("member2", 10));
+        memberRepository.save(new Member("member3", 10));
+        memberRepository.save(new Member("member4", 10));
+        memberRepository.save(new Member("member5", 10));
+        memberRepository.save(new Member("member6", 10));
+
+        int age = 10;
+        PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "username"));
+
+        // when
+        Page<Member> page = memberRepository.findByAge(age, pageRequest);
+
+        // then
+        List<Member> content = page.getContent();
+
+        assertThat(content.size()).isEqualTo(3);
+        assertThat(page.getTotalElements()).isEqualTo(6);
+        assertThat(page.getNumber()).isEqualTo(0);
+        assertThat(page.getTotalPages()).isEqualTo(2);
+        assertThat(page.isFirst()).isTrue();
     }
     
 }
