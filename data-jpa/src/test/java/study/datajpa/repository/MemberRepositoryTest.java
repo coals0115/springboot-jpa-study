@@ -9,6 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.dto.MemberDto;
 import study.datajpa.entity.Member;
@@ -140,7 +143,7 @@ class MemberRepositoryTest {
     @Test
     void returnType() throws Exception {
         Member m1 = new Member("AAA", 10);
-        Member m2 = new Member("AAA", 20);
+        Member m2 = new Member("BBB", 20);
 
         memberRepository.save(m1);
         memberRepository.save(m2);
@@ -228,5 +231,61 @@ class MemberRepositoryTest {
             System.out.println("member.team = " + member.getTeam().getName());
         }
     }
+
+
+    @Test
+    public void paging() throws Exception {
+        // given
+        memberRepository.save(new Member("member1", 10));
+        memberRepository.save(new Member("member2", 10));
+        memberRepository.save(new Member("member3", 10));
+        memberRepository.save(new Member("member4", 10));
+        memberRepository.save(new Member("member5", 10));
+        memberRepository.save(new Member("member6", 10));
+
+        int age = 10;
+        // Pagable의 구현체다.
+        // totalCount 받아올 필요 X. total count 쿼리까지 알아서 날림.
+        PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "username"));// Spring Data JPA는 페이징을 0부터 시작함
+
+        // when
+        Page<Member> page = memberRepository.findByAge(age, pageRequest);
+
+        // then
+        List<Member> content = page.getContent();
+        long totalElements = page.getTotalElements();
+
+        for (Member member : content) {
+            System.out.println("member = " + member);
+        }
+        System.out.println("totalElements = " + totalElements);
+
+        assertThat(content.size()).isEqualTo(3);
+        assertThat(page.getTotalElements()).isEqualTo(6);
+        assertThat(page.getNumber()).isEqualTo(0);
+        assertThat(page.getTotalPages()).isEqualTo(2);
+        assertThat(page.isFirst()).isTrue();
+        assertThat(page.hasNext()).isTrue();
+
+    }
+
+    @Test
+    void queryHint() throws Exception {
+        // given
+        Member member1 = new Member("member1", 10);
+        memberRepository.save(member1);
+        em.flush(); // flush를 해야 DB에 쿼리가 나간다.
+        em.clear(); // 영속성 컨텍스트를 깨끗하게 비움.
+
+        // when
+        Member findMember = memberRepository.findById(member1.getId()).get(); // 실무에서는 절대 바로 get으로 얻어오면 안됨
+        findMember.setUsername("member2");
+
+        em.flush();
+
+
+        // then
+    }
+
 
 }
