@@ -17,7 +17,7 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
 
     List<Member> findTop3HelloBy();
 
-//    @Query(name = "Member.findByUsername")
+    //    @Query(name = "Member.findByUsername")
     List<Member> findByUsername(@Param("username") String username);
 
     @Query("select m from Member m where m.username = :username and m.age = :age")
@@ -33,7 +33,9 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
     List<Member> findByNames(@Param("names") List<String> names);
 
     List<Member> findListByUsername(String username); // 컬렉션
+
     Member findMemberByUsername(String username); // 단건
+
     Optional<Member> findOptionalByUsername(String username); // 단건 Optional
 
     @Query(value = "select m from Member m left join fetch m.team t"
@@ -69,5 +71,10 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
 
     @Lock(LockModeType.PESSIMISTIC_READ)
     List<Member> findLockByUsername(String username);
+
+    List<UsernameOnly> findProjectionsByUsername(String username);
+
+    @Query(value = "SELECT * FROM member WHERE username = ?", nativeQuery = true)
+    Member findByNativeQuery(String username);
 }
 
