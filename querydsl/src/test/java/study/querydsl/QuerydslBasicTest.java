@@ -19,7 +19,6 @@ import jakarta.persistence.PersistenceUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import study.querydsl.dto.MemberDto;
 import study.querydsl.dto.QMemberDto;
@@ -37,7 +36,7 @@ import static study.querydsl.entity.QTeam.team;
 
 @SpringBootTest
 @Transactional
-@Rollback(false)
+//@Rollback(false)
 public class QuerydslBasicTest {
     @PersistenceContext
     EntityManager em;
@@ -640,6 +639,35 @@ public class QuerydslBasicTest {
 
     private Predicate allEq(String usernameCond, Integer ageCond){
         return usernameEq(usernameCond).and(ageEq(ageCond));
+    }
+
+    @Test
+    public void bulkUpdate() throws Exception{
+        //member1(10), memberr2(20) -> 비회원
+        //member3(30), member4(40) -> 그대로
+        long count = queryFactory
+                .update(member)
+                .set(member.username, "비회원")
+                .where(member.age.lt(28))
+                .execute();
+
+        em.flush();
+        em.clear();
+
+        List<Member> result = queryFactory
+                .selectFrom(member)
+                .fetch();
+        for (Member member1 : result) {
+            System.out.println("member1 = " + member1);
+        }
+    }
+
+    @Test
+    public void buldDelete() throws Exception{
+        long count = queryFactory
+                .delete(member)
+                .where(member.age.lt(18))
+                .execute();
     }
 
 }
