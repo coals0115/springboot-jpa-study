@@ -637,12 +637,12 @@ public class QuerydslBasicTest {
         return usernameCond != null ? member.username.eq(usernameCond) : null;
     }
 
-    private Predicate allEq(String usernameCond, Integer ageCond){
+    private Predicate allEq(String usernameCond, Integer ageCond) {
         return usernameEq(usernameCond).and(ageEq(ageCond));
     }
 
     @Test
-    public void bulkUpdate() throws Exception{
+    public void bulkUpdate() throws Exception {
         //member1(10), memberr2(20) -> 비회원
         //member3(30), member4(40) -> 그대로
         long count = queryFactory
@@ -663,11 +663,38 @@ public class QuerydslBasicTest {
     }
 
     @Test
-    public void buldDelete() throws Exception{
+    public void buldDelete() throws Exception {
         long count = queryFactory
                 .delete(member)
                 .where(member.age.lt(18))
                 .execute();
+    }
+
+    @Test
+    public void sqlFunction() throws Exception {
+        List<String> result = queryFactory
+                .select(
+                        Expressions.stringTemplate("function('replace', {0},{1},{2})",
+                                member.username, "member", "M"))
+                .from(member)
+                .fetch();
+        for (String s : result) {
+            System.out.println("s = " + s);
+        }
+    }
+
+    @Test
+    public void sqlFunction2() throws Exception {
+        List<String> result = queryFactory
+                .select(member.username)
+                .from(member)
+//                .where(member.username.eq(Expressions.stringTemplate("function('lower', {0})", member.username)))
+                .where(member.username.eq(member.username.lower()))
+                .fetch();
+
+        for (String s : result) {
+            System.out.println("s = " + s);
+        }
     }
 
 }
