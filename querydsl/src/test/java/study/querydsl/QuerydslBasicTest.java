@@ -251,6 +251,21 @@ public class QuerydslBasicTest {
                 .containsExactly("member1", "member2");
     }
 
+
+    @Test
+    public void join_on_filtering() throws Exception {
+        List<Tuple> result = queryFactory
+                .select(member, team)
+                .from(member)
+                .leftJoin(member.team, team)
+                .on(team.name.eq("teamA"))
+                .fetch();
+
+        for (Tuple tuple : result) {
+            System.out.println("tuple = " + tuple);
+        }
+    }
+
     /**
      * 연관관계가 없는 엔티티 외부 조인
      * 회원의 이름이 팀 이름과 같은 대상을 외부 조인
@@ -274,5 +289,4 @@ public class QuerydslBasicTest {
             System.out.println("tuple = " + tuple);
         }
     }
-
 }
