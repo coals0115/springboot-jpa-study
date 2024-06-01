@@ -586,5 +586,5 @@ public class QuerydslBasicTest {
             System.out.println("memberDto = " + memberDto);
         }
     }
-    
+
 }
