@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import study.querydsl.dto.MemberSearchCondition;
+import study.querydsl.dto.MemberTeamDto;
 import study.querydsl.entity.Member;
 import study.querydsl.entity.Team;
 
@@ -61,8 +62,8 @@ class MemberRepositoryTest {
         condition.setAgeLoe(40);
         condition.setTeamName("teamB");
 
-//        List<MemberTeamDto> result = memberRepository.search(condition);
-//        assertThat(result).extracting("username").containsExactly("member4");
+        List<MemberTeamDto> result = memberRepository.search(condition);
+        assertThat(result).extracting("username").containsExactly("member4");
     }
 
 }
